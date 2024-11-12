@@ -2,7 +2,10 @@
 
 The way to use this code is to subclass Problem to create a class of problems,
 then create problem instances and solve them with calls to the various search
-functions."""
+functions.
+
+comentario
+"""
 from asyncio import PriorityQueue
 from cgitb import reset
 
