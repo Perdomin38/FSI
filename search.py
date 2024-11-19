@@ -2,16 +2,13 @@
 
 The way to use this code is to subclass Problem to create a class of problems,
 then create problem instances and solve them with calls to the various search
-functions.
+functions."""
 
-comentario
-"""
-from asyncio import PriorityQueue
-from cgitb import reset
 
 from utils import *
 import random
 import sys
+
 
 # ______________________________________________________________________________
 
@@ -29,7 +26,7 @@ class Problem:
         self.initial = initial
         self.goal = goal
 
-    def successor(self, state, abstract=None):
+    def successor(self, state):
         """Given a state, return a sequence of (action, state) pairs reachable
         from this state. If there are many successors, consider an iterator
         that yields the successors one at a time, rather than building them
@@ -50,12 +47,10 @@ class Problem:
         and action. The default method costs 1 for every step in the path."""
         return c + 1
 
-    def value(self, abstract=None):
+    def value(self):
         """For optimization problems, each state has a value.  Hill-climbing
         and related algorithms try to maximize this value."""
         abstract
-
-
 
 
 # ______________________________________________________________________________
@@ -77,9 +72,9 @@ class Node:
         if parent:
             self.depth = parent.depth + 1
 
+
     def __repr__(self):
         return "<Node %s>" % (self.state,)
-
 
     def path(self):
         """Create a list of nodes from the root to this node."""
@@ -95,46 +90,32 @@ class Node:
                      problem.path_cost(self.path_cost, self.state, act, next))
                 for (act, next) in problem.successor(self.state)]
 
+
 # ______________________________________________________________________________
 ## Uninformed Search algorithms
+
 def graph_search(problem, fringe):
     """Search through the successors of a problem to find a goal.
     The argument fringe should be an empty queue.
     If two paths reach a state, only use the best one. [Fig. 3.18]"""
-    """closed = {}
-    fringe.append(Node(problem.initial))
-    generados = 0
-    visitados = 0
-    while fringe:
-        node = fringe.pop()
-        if problem.goal_test(node.state):
-            return node
-        if node.state not in closed:
-            closed[node.state] = True #Resuelto
-            fringe.extend(node.expand(problem))
-            fringe.sort(key=lambda n: n.path_cost)
-            generados += len(fringe)
-        visitados += 1
-    return None"""
-
     closed = {}     # En vez de lista usa diccionario. Más comodidad para comprobar si está dentro o no.
-    cont_expandidos = 0
+    cont_generados = 1
     cont_visitados = 0
     fringe.append(Node(problem.initial))
     while fringe:
         node = fringe.pop()
         cont_visitados += 1
         if problem.goal_test(node.state):
-            print("Número de nodos expandidos: ", cont_expandidos)
             print("Número de nodos visitados: ", cont_visitados)
+            print("Número de nodos expandidos: ", cont_generados)
             return node
         if node.state not in closed:
             closed[node.state] = True
-            cont_expandidos += 1
             fringe.extend(node.expand(problem))
+            cont_generados += len(node.expand(problem))
     return None
 
-    #Modificaciones
+
 def breadth_first_graph_search(problem):
     """Search the shallowest nodes in the search tree first. [p 74]"""
     return graph_search(problem, FIFOQueue())  # FIFOQueue -> fringe
@@ -144,18 +125,21 @@ def depth_first_graph_search(problem):
     """Search the deepest nodes in the search tree first. [p 74]"""
     return graph_search(problem, Stack())
 
+
 def ramificacion_graph_search(problem):
     """Ordena el fringe en función del camino mínimo"""
     return graph_search(problem, rama())
 
-
-
+def ramificacion_subestimacion_graph_search(problem):
+    """Ordena el fringe en función del camino mínimo"""
+    return graph_search(problem, subestimacion(problem))
 
 # _____________________________________________________________________________
 # The remainder of this file implements examples for the search algorithms.
 
 # ______________________________________________________________________________
 # Graphs and Graph Problems
+
 class Graph:
     """A graph connects nodes (vertices) by edges (links).  Each edge can also
     have a length associated with it.  The constructor call is something like:
@@ -292,5 +276,3 @@ class GPSProblem(Problem):
             return int(distance(locs[node.state], locs[self.goal]))
         else:
             return infinity
-
-

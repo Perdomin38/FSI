@@ -1,14 +1,13 @@
-import copy
 
 #______________________________________________________________________________
 # Simple Data Structures: infinity, Dict, Struct
-
+import math
 infinity = 1.0e400
 
 
 def Dict(**entries):
     """Create a dict out of the argument=value arguments.
-    >>> Dict(a=1, b=2, c=3)
+    >>> Dict(a=1, b=2, c=3)j
     {'a': 1, 'c': 3, 'b': 2}
     """
     return entries
@@ -544,8 +543,8 @@ class FIFOQueue(Queue):
             self.start = 0
         return e
 
-
 class rama(Queue):
+    """"A First-In-First-Out Queue."""
 
     def __init__(self):
         self.A = []
@@ -565,6 +564,25 @@ class rama(Queue):
 
 
 
+class subestimacion(Queue):
+    """A First-In-First-Out Queue."""
+
+    def __init__(self, problem):
+        self.A = []
+        self.problem = problem
+
+    def append(self, item):
+        self.A.append(item)
+
+    def __len__(self):
+        return len(self.A)
+
+    def extend(self, items):
+        self.A.extend(items)
+        self.A.sort(key = lambda x: x.path_cost + self.problem.h(x), reverse = True)
+
+    def pop(self):
+        return self.A.pop()
 ## Fig: The idea is we can define things like Fig[3,10] later.
 ## Alas, it is Fig[3,10] not Fig[3.10], because that would be the same as Fig[3.1]
 Fig = {}
