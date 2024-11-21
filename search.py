@@ -108,6 +108,7 @@ def graph_search(problem, fringe):
         if problem.goal_test(node.state):
             print("Número de nodos visitados: ", cont_visitados)
             print("Número de nodos expandidos: ", cont_generados)
+            print("Coste Total: ", node.path_cost)
             return node
         if node.state not in closed:
             closed[node.state] = True
@@ -126,13 +127,13 @@ def depth_first_graph_search(problem):
     return graph_search(problem, Stack())
 
 
-def ramificacion_graph_search(problem):
+def branch_and_baund(problem):
     """Ordena el fringe en función del camino mínimo"""
-    return graph_search(problem, rama())
+    return graph_search(problem, PriorityQueue())
 
-def ramificacion_subestimacion_graph_search(problem):
+def branch_and_baund_underestimation(problem):
     """Ordena el fringe en función del camino mínimo"""
-    return graph_search(problem, subestimacion(problem))
+    return graph_search(problem, PriorityQueue(problem))
 
 # _____________________________________________________________________________
 # The remainder of this file implements examples for the search algorithms.

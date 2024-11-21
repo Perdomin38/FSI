@@ -1,21 +1,59 @@
 # Search methods
 
-import search
+from search import *
+import time
 
-ab = search.GPSProblem('A', 'B'
-                       , search.romania)
+ab = GPSProblem('A', 'B'
+                       , romania)
 
-og = search.GPSProblem('O', 'G'
-                       , search.romania)
+og = GPSProblem('O', 'G'
+                       , romania)
 
-ch = search.GPSProblem('C', 'H'
-                       , search.romania)
+ch = GPSProblem('C', 'H'
+                       , romania)
 
-lu = search.GPSProblem('L', 'U'
-                       , search.romania)
+lu = GPSProblem('L', 'U'
+                       , romania)
 
-print(search.ramificacion_graph_search(ab).path())
-print("-----------------------------")
+# Breadth-First Search
+print("\n--------------")
+print("Breadth-First Search")
+start_time = time.time()
+bfs_result = breadth_first_graph_search(ab)
+end_time = time.time()
+print("Result:", bfs_result.path())
+print(f"Execution Time: {end_time - start_time:.6f} seconds")
+print("--------------\n")
 
-print(search.ramificacion_subestimacion_graph_search(ab).path())
+# Depth-First Search
+print("--------------")
+print("Depth-First Search")
+start_time = time.time()
+dfs_result = depth_first_graph_search(ab)
+end_time = time.time()
+print("Result:", dfs_result.path())
+print(f"Execution Time: {end_time - start_time:.6f} seconds")
+print("--------------\n")
+
+# Branch and baund
+print("--------------")
+print("Branch and baund")
+start_time = time.time()
+ram_result = branch_and_baund(ab)
+end_time = time.time()
+print("Result:", ram_result.path())
+print(f"Execution Time: {end_time - start_time:.6f} seconds")
+print("--------------\n")
+
+# Branch and baund underestimation
+print("--------------")
+print("Branch and baund underestimation")
+start_time = time.time()
+ram_result = branch_and_baund_underestimation(ab)
+end_time = time.time()
+print("Result:", ram_result.path())
+print(f"Execution Time: {end_time - start_time:.6f} seconds")
+print("--------------\n")
+
+
 

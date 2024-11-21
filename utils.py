@@ -543,46 +543,40 @@ class FIFOQueue(Queue):
             self.start = 0
         return e
 
-class rama(Queue):
-    """"A First-In-First-Out Queue."""
+class PriorityQueue:
+    """Priority Queue that acts as 'rama' or 'subestimacion' based on the provided problem."""
 
-    def __init__(self):
-        self.A = []
+    def __init__(self, problem=None):
+        """
+        Initialize the PriorityQueue.
 
-    def append(self, item):
-        self.A.append(item)
-
-    def __len__(self):
-        return len(self.A)
-
-    def extend(self, items):
-        self.A.extend(items)
-        self.A.sort(key = lambda x: x.path_cost, reverse = True)
-
-    def pop(self):
-        return self.A.pop()
-
-
-
-class subestimacion(Queue):
-    """A First-In-First-Out Queue."""
-
-    def __init__(self, problem):
+        Args:
+            problem: If provided, the queue will act as 'subestimacion'.
+                     Otherwise, it will act as 'rama'.
+        """
         self.A = []
         self.problem = problem
 
     def append(self, item):
+        """Add a single item to the queue."""
         self.A.append(item)
 
     def __len__(self):
+        """Return the length of the queue."""
         return len(self.A)
 
     def extend(self, items):
+        """Extend the queue with multiple items and sort based on priority."""
         self.A.extend(items)
-        self.A.sort(key = lambda x: x.path_cost + self.problem.h(x), reverse = True)
+        if self.problem:  # Act as 'subestimacion'
+            self.A.sort(key=lambda x: x.path_cost + self.problem.h(x), reverse=True)
+        else:  # Act as 'rama'
+            self.A.sort(key=lambda x: x.path_cost, reverse=True)
 
     def pop(self):
+        """Remove and return the item with the highest priority."""
         return self.A.pop()
+
 ## Fig: The idea is we can define things like Fig[3,10] later.
 ## Alas, it is Fig[3,10] not Fig[3.10], because that would be the same as Fig[3.1]
 Fig = {}
